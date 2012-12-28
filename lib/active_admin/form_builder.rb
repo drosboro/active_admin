@@ -48,6 +48,7 @@ module ActiveAdmin
     end
 
     def has_many(association, options = {}, &block)
+      header = options.delete(:header)
       options = { :for => association }.merge(options)
       options[:class] ||= ""
       options[:class] << "inputs has_many_fields"
@@ -73,7 +74,7 @@ module ActiveAdmin
 
       content = with_new_form_buffer do
         template.content_tag :div, :class => "has_many #{association}" do
-          form_buffers.last << template.content_tag(:h3, object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
+          form_buffers.last << template.content_tag(:h3, header || object.class.reflect_on_association(association).klass.model_name.human(:count => 1.1))
           inputs options, &form_block
 
           js = js_for_has_many(association, form_block, template)
